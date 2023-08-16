@@ -6,6 +6,8 @@ interface IMovieStore {
   setMovies: (movies: IMovie[]) => void;
   searchKey: string;
   setSearchKey: (key: string) => void;
+  currentPage: number;
+  incrementPage: () => void;
 }
 
 export const useMovieStore = create<IMovieStore>((set) => ({
@@ -13,4 +15,6 @@ export const useMovieStore = create<IMovieStore>((set) => ({
   setMovies: (movies) => set({ movies }),
   searchKey: "",
   setSearchKey: (key) => set({ searchKey: key }),
+  currentPage: 1,
+  incrementPage: () => set((prev) => ({ currentPage: prev.currentPage + 1 })),
 }));
