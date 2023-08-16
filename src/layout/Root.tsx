@@ -3,25 +3,25 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
-import SearchBar from "../components/Search";
-import { Outlet } from "react-router-dom";
-import { useMovieStore } from "../stores/movies.store";
 import { debounce } from "lodash";
+import { Outlet } from "react-router-dom";
+import SearchBar from "../components/Search";
+import { useMovieStore } from "../stores/movies.store";
 
 function Root() {
-  const { setSearchKey } = useMovieStore();
+  const { setSearchKey, resetSearch } = useMovieStore();
+
+  const handleSearchInput = debounce((key: string) => {
+    resetSearch();
+    setSearchKey(key);
+  }, 300);
+
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar sx={{ justifyContent: "space-between" }}>
-            <SearchBar
-              onSearchKeyChange={(key) =>
-                debounce(() => {
-                  setSearchKey(key);
-                }, 1000)
-              }
-            />
+            <SearchBar onSearchKeyChange={handleSearchInput} />
             <IconButton
               size="large"
               edge="start"

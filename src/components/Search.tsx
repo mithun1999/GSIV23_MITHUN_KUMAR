@@ -51,7 +51,9 @@ function SearchBar({
       <StyledInputBase
         placeholder="Search…"
         inputProps={{ "aria-label": "search" }}
-        onChange={(e) => onSearchKeyChange(e.target.value)}
+        onChange={(e) => {
+          onSearchKeyChange(e.target.value);
+        }}
       />
     </SearchWrapper>
   );
