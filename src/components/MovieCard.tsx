@@ -12,7 +12,9 @@ interface IMovieCard {
 
 function MovieCard(props: IMovieCard) {
   return (
-    <Card sx={{ minWidth: 345, maxWidth: 345, minHeight: 240 }}>
+    <Card
+      sx={{ minWidth: 345, maxWidth: 345, minHeight: 240, cursor: "pointer" }}
+    >
       <CardMedia sx={{ width: "100%", height: 140 }} image={props.image} />
       <CardContent>
         <Stack

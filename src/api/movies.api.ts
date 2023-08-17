@@ -15,3 +15,11 @@ export async function searchMovies(query: string, page: number) {
   });
   return data as any;
 }
+
+export async function getMovieById(id: string) {
+  const { data } = await axiosInstance({
+    method: "GET",
+    url: `movie/${id}?language=en-US`,
+  });
+  return data as any;
+}

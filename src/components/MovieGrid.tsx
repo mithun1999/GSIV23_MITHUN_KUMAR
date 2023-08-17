@@ -2,6 +2,7 @@ import { CircularProgress, Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useRef } from "react";
 import { IMovie } from "../interfaces/movie.interface";
 import MovieCard from "./MovieCard";
+import { useNavigate } from "react-router-dom";
 
 interface IMovieGrid {
   data: IMovie[];
@@ -14,6 +15,7 @@ interface IMovieGrid {
 function MovieGrid(props: IMovieGrid) {
   const observerTarget = useRef(null);
   const { data, fetchData, hasMore, isLoading, key } = props;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -40,7 +42,13 @@ function MovieGrid(props: IMovieGrid) {
     <div>
       <Grid container spacing={4} justifyContent="space-around">
         {data?.map((movie) => (
-          <Grid item key={movie?.id}>
+          <Grid
+            item
+            key={movie?.id}
+            onClick={() => {
+              navigate(`/details/${movie.id}`);
+            }}
+          >
             <MovieCard
               title={movie?.title}
               rating={movie?.popularity}
