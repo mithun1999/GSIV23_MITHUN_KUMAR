@@ -3,7 +3,7 @@ import List from "./pages/List";
 import Root from "./layout/Root";
 import Details from "./pages/Details";
 
-export const router = createBrowserRouter([
+export const routes = [
   {
     path: "/",
     element: <Root />,
@@ -18,4 +18,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+
+export const router = createBrowserRouter(routes);
