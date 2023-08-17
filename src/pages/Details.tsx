@@ -8,23 +8,35 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getMovieById } from "../api/movies.api";
-import { IMovie } from "../interfaces/movie.interface";
+import { getMovieById, getMovieCastById } from "../api/movies.api";
+import { IMovie, IMovieCredits } from "../interfaces/movie.interface";
+import { toHoursAndMinutes } from "../utils/time.util";
 
 function Details() {
   const { id } = useParams();
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<IMovie | null>(null);
+  const [creditData, setCreditData] = useState<IMovieCredits | null>(null);
   const [error, setError] = useState("");
   const releaseYear = new Date(data?.release_date ?? "")?.getFullYear();
+  const formatedTime = toHoursAndMinutes(data?.runtime ?? 0);
+  const director = creditData?.crew?.find((per) => per?.job === "Director");
+  const cast = creditData?.crew?.map((c) => c?.name);
 
   async function fetchMovie() {
     setLoading(true);
     try {
-      const response = await getMovieById(id ?? "");
+      const movieDataPromise = getMovieById(id ?? "");
+      const castDataPromise = getMovieCastById(id ?? "");
+      const [movieData, castData] = await Promise.all([
+        movieDataPromise,
+        castDataPromise,
+      ]);
       setLoading(false);
-      setData(response);
+      setData(movieData);
+      setCreditData(castData);
     } catch (error: any) {
+      setLoading(false);
       setError(error?.message || "Something went wrong");
     }
   }
@@ -57,7 +69,7 @@ function Details() {
           <Box>
             <CardMedia
               component="img"
-              sx={{ width: "100%", height: 300 }}
+              sx={{ width: "100%", minWidth: 200, maxHeight: 300 }}
               image={
                 data?.poster_path
                   ? `https://image.tmdb.org/t/p/original/${data?.poster_path}`
@@ -70,7 +82,10 @@ function Details() {
               {data?.title} ({data?.popularity})
             </Typography>
             <Typography gutterBottom variant="body1" component="p">
-              {releaseYear} | {data?.runtime}
+              {releaseYear} | {formatedTime} | {director?.name}
+            </Typography>
+            <Typography gutterBottom variant="body1" component="p">
+              Cast: {cast?.toString()}
             </Typography>
             <Typography gutterBottom variant="body1" component="p">
               Description: {data?.overview}

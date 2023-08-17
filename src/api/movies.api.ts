@@ -23,3 +23,11 @@ export async function getMovieById(id: string) {
   });
   return data as any;
 }
+
+export async function getMovieCastById(id: string) {
+  const { data } = await axiosInstance({
+    method: "GET",
+    url: `movie/${id}/credits?language=en-US`,
+  });
+  return data as any;
+}
